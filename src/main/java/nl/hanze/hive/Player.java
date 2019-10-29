@@ -78,19 +78,30 @@ public class Player {
     }
 
     public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
+        // Check if Queen Bee has been played
         for(Tile t : tiles) {
             if(t.getTile() == Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play Queen Bee first before moving any tiles"); }
         }
 
+        // Check if the tile to be moved is from this player
         HashMap<ArrayList<Integer>, Stack<Tile>> boardList = b.getBoard();
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
         Stack<Tile> tiles = boardList.get(fromCoords);
         Tile tileToMove = tiles.peek();
-        if (tileToMove.getColor() != this.color) {
-            throw new Hive.IllegalMove("Can only move tiles of your own color");
+        if (tileToMove.getColor() != this.color) { throw new Hive.IllegalMove("Can only move tiles of your own color"); }
+
+        // Check if the moved tile will land next to a tile
+        boolean foundNeighbour = false;
+        ArrayList<ArrayList<Integer>> surroundingToCoords = b.getSurroundingTiles(toQ, toR);
+        for (ArrayList<Integer> coords : surroundingToCoords) {
+            if (boardList.containsKey(coords)) {
+                Stack<Tile> st = boardList.get(coords);
+                if (!st.empty()) { foundNeighbour = true; }
+            }
         }
+        if (!foundNeighbour) { throw new Hive.IllegalMove("Tile should move next to a tile"); }
         b.moveTile(fromQ, fromR, toQ, toR);
         g.nextTurn();
     }

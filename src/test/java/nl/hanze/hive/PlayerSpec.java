@@ -314,7 +314,7 @@ public class PlayerSpec {
             pWhite.moveTile(game, board, fromQWhiteTile, fromQWhiteTile, 0,1);
         });
 
-        // Play Queen Bee Tile first
+        // Play Queen Bee Tile
         ArrayList<Tile> tilesWhite = pWhite.getTiles();
         Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
         try {
@@ -328,5 +328,30 @@ public class PlayerSpec {
         } catch (Hive.IllegalMove illegalMove) {
             assertTrue(false, "Shouldn't throw exception!");
         }
+    }
+
+    @Test
+    void givenTileNeighboursATileWhenMovedThenTrue() {
+        Player pWhite = new Player(Hive.Player.WHITE);
+        Player pBlack = new Player(Hive.Player.BLACK);
+        Board board = new Board();
+        Game game = new Game(pWhite, pBlack, board);
+
+        // Play Queen Bee Tile
+        ArrayList<Tile> tilesWhite = pWhite.getTiles();
+        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        try {
+            pWhite.playTile(game, queenBeeTile, board,  0, 0);
+        } catch (Hive.IllegalMove illegalMove) {
+            illegalMove.printStackTrace();
+        }
+
+        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(1,0, tile);
+
+        assertThrows(Hive.IllegalMove.class, () -> {
+            pWhite.moveTile(game, board, 1, 0, 3, 0);
+        });
+
     }
 }
