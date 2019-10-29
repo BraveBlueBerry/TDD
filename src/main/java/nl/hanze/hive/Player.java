@@ -1,8 +1,7 @@
 package nl.hanze.hive;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Player {
     private final Hive.Player color;
@@ -84,11 +83,11 @@ public class Player {
         }
 
         // Check if the tile to be moved is from this player
-        HashMap<ArrayList<Integer>, Stack<Tile>> boardList = b.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Tile>> boardMap = b.getBoard();
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
-        Stack<Tile> tiles = boardList.get(fromCoords);
+        Stack<Tile> tiles = boardMap.get(fromCoords);
         Tile tileToMove = tiles.peek();
         if (tileToMove.getColor() != this.color) { throw new Hive.IllegalMove("Can only move tiles of your own color"); }
 
@@ -96,12 +95,36 @@ public class Player {
         boolean foundNeighbour = false;
         ArrayList<ArrayList<Integer>> surroundingToCoords = b.getSurroundingTiles(toQ, toR);
         for (ArrayList<Integer> coords : surroundingToCoords) {
-            if (boardList.containsKey(coords)) {
-                Stack<Tile> st = boardList.get(coords);
+            if (boardMap.containsKey(coords)) {
+                Stack<Tile> st = boardMap.get(coords);
                 if (!st.empty()) { foundNeighbour = true; }
             }
         }
         if (!foundNeighbour) { throw new Hive.IllegalMove("Tile should move next to a tile"); }
+
+        // Check if moved tile doesn't make separate groups
+        int lengthBoardMap = boardMap.size();
+        ArrayList<Integer> toCoords = new ArrayList<>();
+        toCoords.add(toQ);
+        toCoords.add(toR);
+        Set<ArrayList<Integer>> weirdkeys = boardMap.keySet();
+        HashSet<ArrayList<Integer>> keys = new HashSet<>(weirdkeys);
+        keys.remove(fromCoords);
+        keys.add(toCoords);
+        ArrayList<ArrayList<Integer>> visited = new ArrayList<>();
+        Stack<ArrayList<Integer>> checking = new Stack<>();
+        checking.push(toCoords);
+        while(!checking.isEmpty()) {
+            ArrayList<Integer> current = checking.pop();
+            if(visited.contains(current)) { continue; }
+            visited.add(current);
+            ArrayList<ArrayList<Integer>> surroundingCoords = b.getSurroundingTiles(current.get(0), current.get(1));
+            for (ArrayList<Integer> coords : surroundingCoords) {
+                if(keys.contains(coords)) { checking.push(coords); }
+            }
+        }
+        if(visited.size() != lengthBoardMap) { throw new Hive.IllegalMove("There are separate groups"); }
+
         b.moveTile(fromQ, fromR, toQ, toR);
         g.nextTurn();
     }
