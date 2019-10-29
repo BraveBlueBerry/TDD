@@ -78,6 +78,10 @@ public class Player {
     }
 
     public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
+        for(Tile t : tiles) {
+            if(t.getTile() == Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play Queen Bee first before moving any tiles"); }
+        }
+
         HashMap<ArrayList<Integer>, Stack<Tile>> boardList = b.getBoard();
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);

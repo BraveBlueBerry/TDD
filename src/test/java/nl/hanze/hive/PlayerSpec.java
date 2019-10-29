@@ -2,6 +2,7 @@ package nl.hanze.hive;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -267,6 +268,17 @@ public class PlayerSpec {
         Player pWhite = new Player(Hive.Player.WHITE);
         Player pBlack = new Player(Hive.Player.BLACK);
         Board board = new Board();
+        Game game = new Game(pWhite, pBlack, board);
+
+        // Play Queen Bee Tile first
+        ArrayList<Tile> tilesWhite = pWhite.getTiles();
+        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        try {
+            pWhite.playTile(game, queenBeeTile, board, 2, 0);
+        } catch (Hive.IllegalMove illegalMove) {
+            illegalMove.printStackTrace();
+        }
+
         Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
         int fromQWhiteTile = 0;
         int fromRWhiteTile = 0;
@@ -275,7 +287,6 @@ public class PlayerSpec {
         board.setTile(fromQWhiteTile,fromRWhiteTile, tile);
         tile = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
         board.setTile(fromQBlackTile,fromRBlackTile, tile);
-        Game game = new Game(pWhite, pBlack, board);
 
         try {
             pWhite.moveTile(game, board, fromQWhiteTile, fromRWhiteTile, 0,1);
@@ -286,5 +297,36 @@ public class PlayerSpec {
         assertThrows(Hive.IllegalMove.class, () -> {
             pWhite.moveTile(game, board, fromQBlackTile, fromRBlackTile, 1,2);
         });
+    }
+
+    @Test
+    void givenPlayerCanOnlyMoveTilesWhenQueenBeePlayedThenTrue() {
+        Player pWhite = new Player(Hive.Player.WHITE);
+        Player pBlack = new Player(Hive.Player.BLACK);
+        Board board = new Board();
+        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        int fromQWhiteTile = 0;
+        int fromRWhiteTile = 0;
+        board.setTile(fromQWhiteTile,fromRWhiteTile, tile);
+        Game game = new Game(pWhite, pBlack, board);
+        // No queen bee has been played
+        assertThrows(Hive.IllegalMove.class, () -> {
+            pWhite.moveTile(game, board, fromQWhiteTile, fromQWhiteTile, 0,1);
+        });
+
+        // Play Queen Bee Tile first
+        ArrayList<Tile> tilesWhite = pWhite.getTiles();
+        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        try {
+            pWhite.playTile(game, queenBeeTile, board, fromQWhiteTile + 1, fromQWhiteTile);
+        } catch (Hive.IllegalMove illegalMove) {
+            illegalMove.printStackTrace();
+        }
+
+        try {
+            pWhite.moveTile(game, board, fromQWhiteTile, fromQWhiteTile, 0,1);
+        } catch (Hive.IllegalMove illegalMove) {
+            assertTrue(false, "Shouldn't throw exception!");
+        }
     }
 }
