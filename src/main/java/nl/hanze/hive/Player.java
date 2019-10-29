@@ -77,7 +77,16 @@ public class Player {
         g.nextTurn();
     }
 
-    public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) {
+    public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
+        HashMap<ArrayList<Integer>, Stack<Tile>> boardList = b.getBoard();
+        ArrayList<Integer> fromCoords = new ArrayList<>();
+        fromCoords.add(fromQ);
+        fromCoords.add(fromR);
+        Stack<Tile> tiles = boardList.get(fromCoords);
+        Tile tileToMove = tiles.peek();
+        if (tileToMove.getColor() != this.color) {
+            throw new Hive.IllegalMove("Can only move tiles of your own color");
+        }
         b.moveTile(fromQ, fromR, toQ, toR);
         g.nextTurn();
     }

@@ -78,11 +78,9 @@ public class Board {
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
         Stack<Tile> tilesOnSpot = board.get(fromCoords);
-        System.out.println(tilesOnSpot);
         Tile tileToMove = tilesOnSpot.pop();
         setTile(toQ, toR, tileToMove);
         if (tilesOnSpot.empty()) {
-            System.out.println(tilesOnSpot);
             board.remove(fromCoords);
         }
     }

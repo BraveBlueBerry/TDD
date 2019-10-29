@@ -95,7 +95,11 @@ public class PlayerSpec {
             illegalMove.printStackTrace();
             assertTrue(false);
         }
-        pWhite.moveTile(g, b, fromCoords.get(0), fromCoords.get(1), toCoords.get(0), toCoords.get(1));
+        try {
+            pWhite.moveTile(g, b, fromCoords.get(0), fromCoords.get(1), toCoords.get(0), toCoords.get(1));
+        } catch (Hive.IllegalMove illegalMove) {
+            illegalMove.printStackTrace();
+        }
 
         HashMap<ArrayList<Integer>, Stack<Tile>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Tile>>();
         Stack<Tile> tileStack = new Stack<Tile>();
@@ -256,6 +260,31 @@ public class PlayerSpec {
         assertThrows(Hive.IllegalMove.class, () -> {
             pBlack.playTile(game, pBlack.getTiles().get(1), board, -1, 0);
         });
+    }
 
+    @Test
+    void givenPlayerCanOnlyMovesOwnPlacedTilesThenTrue() {
+        Player pWhite = new Player(Hive.Player.WHITE);
+        Player pBlack = new Player(Hive.Player.BLACK);
+        Board board = new Board();
+        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        int fromQWhiteTile = 0;
+        int fromRWhiteTile = 0;
+        int fromQBlackTile = 1;
+        int fromRBlackTile = 1;
+        board.setTile(fromQWhiteTile,fromRWhiteTile, tile);
+        tile = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        board.setTile(fromQBlackTile,fromRBlackTile, tile);
+        Game game = new Game(pWhite, pBlack, board);
+
+        try {
+            pWhite.moveTile(game, board, fromQWhiteTile, fromRWhiteTile, 0,1);
+        } catch (Hive.IllegalMove illegalMove) {
+            assertTrue(false, "Shouldn't throw exception yet!");
+        }
+
+        assertThrows(Hive.IllegalMove.class, () -> {
+            pWhite.moveTile(game, board, fromQBlackTile, fromRBlackTile, 1,2);
+        });
     }
 }
