@@ -13,7 +13,6 @@ import java.util.Stack;
  * Links = - 10
  */
 public class Board {
-    // private ArrayList<ArrayList> board;
     private HashMap<ArrayList<Integer>, Stack<Tile>> board;
 
     public Board() {
@@ -24,7 +23,7 @@ public class Board {
         return board;
     }
 
-    public ArrayList getSurroundingTiles(int q, int r) {
+    public ArrayList<ArrayList<Integer>> getSurroundingTiles(int q, int r) {
         ArrayList<ArrayList<Integer>> surroundingTiles = new ArrayList<>(6);
         for(int i=0; i < 6; i++) {
             surroundingTiles.add(new ArrayList());
@@ -63,12 +62,14 @@ public class Board {
         board.put(coords, tiles);
     }
 
-    public Stack getTilesOnSpot(int q, int r) {
+    public Stack<Tile> getTilesOnSpot(int q, int r) {
         ArrayList<Integer> coords = new ArrayList<>();
         coords.add(q);
         coords.add(r);
         Stack<Tile> tiles = board.get(coords);
-        System.out.println(tiles);
+        if (tiles == null) {
+            tiles = new Stack<Tile>();
+        }
         return tiles;
     }
 
@@ -84,5 +85,15 @@ public class Board {
             System.out.println(tilesOnSpot);
             board.remove(fromCoords);
         }
+    }
+
+    public boolean hasTilesOfPlayer(Player player) {
+        Hive.Player color = player.getColor();
+        for(Stack<Tile> tileStack: board.values()) {
+            if(tileStack.peek().getColor().equals(color)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
