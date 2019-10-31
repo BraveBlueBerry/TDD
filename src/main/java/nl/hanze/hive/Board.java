@@ -13,13 +13,13 @@ import java.util.Stack;
  * Links = - 10
  */
 public class Board {
-    private HashMap<ArrayList<Integer>, Stack<Tile>> board;
+    private HashMap<ArrayList<Integer>, Stack<Stone>> board;
 
     public Board() {
-        board = new HashMap<ArrayList<Integer>, Stack<Tile>>();
+        board = new HashMap<ArrayList<Integer>, Stack<Stone>>();
     }
 
-    public HashMap<ArrayList<Integer>, Stack<Tile>> getBoard() {
+    public HashMap<ArrayList<Integer>, Stack<Stone>> getBoard() {
         return board;
     }
 
@@ -49,46 +49,46 @@ public class Board {
         return surroundingTiles;
     }
 
-    public void setTile(int q, int r, Tile tile) {
+    public void setTile(int q, int r, Stone stone) {
         ArrayList<Integer> coords = new ArrayList<>();
         coords.add(q);
         coords.add(r);
-        Stack<Tile> tiles = new Stack<>();
+        Stack<Stone> stones = new Stack<>();
         if (board.get(coords) != null){
-            tiles = board.get(coords);
+            stones = board.get(coords);
         }
 
-        tiles.push(tile);
-        board.put(coords, tiles);
+        stones.push(stone);
+        board.put(coords, stones);
     }
 
-    public Stack<Tile> getTilesOnSpot(int q, int r) {
+    public Stack<Stone> getTilesOnSpot(int q, int r) {
         ArrayList<Integer> coords = new ArrayList<>();
         coords.add(q);
         coords.add(r);
-        Stack<Tile> tiles = board.get(coords);
-        if (tiles == null) {
-            tiles = new Stack<Tile>();
+        Stack<Stone> stones = board.get(coords);
+        if (stones == null) {
+            stones = new Stack<Stone>();
         }
-        return tiles;
+        return stones;
     }
 
     public void moveTile(int fromQ, int fromR, int toQ, int toR) {
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
-        Stack<Tile> tilesOnSpot = board.get(fromCoords);
-        Tile tileToMove = tilesOnSpot.pop();
-        setTile(toQ, toR, tileToMove);
+        Stack<Stone> tilesOnSpot = board.get(fromCoords);
+        Stone stoneToMove = tilesOnSpot.pop();
+        setTile(toQ, toR, stoneToMove);
         if (tilesOnSpot.empty()) {
             board.remove(fromCoords);
         }
     }
 
-    public boolean hasTilesOfPlayer(Player player) {
-        Hive.Player color = player.getColor();
-        for(Stack<Tile> tileStack: board.values()) {
-            if(tileStack.peek().getColor().equals(color)) {
+    public boolean hasTilesOfPlayer(Human human) {
+        Hive.Player color = human.getColor();
+        for(Stack<Stone> stoneStack : board.values()) {
+            if(stoneStack.peek().getColor().equals(color)) {
                 return true;
             }
         }

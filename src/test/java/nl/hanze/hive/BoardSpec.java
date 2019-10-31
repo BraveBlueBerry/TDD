@@ -20,11 +20,11 @@ public class BoardSpec {
         int q = 0;
         int r = 0;
         Board board = new Board();
-        Tile tile = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
-        board.setTile(q, r, tile);
-        Stack<Tile> tilesOnSpotQAndR = board.getTilesOnSpot(q, r);
-        Tile tileOnSpotQAndR = tilesOnSpotQAndR.peek();
-        assertEquals(tile, tileOnSpotQAndR);
+        Stone stone = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        board.setTile(q, r, stone);
+        Stack<Stone> tilesOnSpotQAndR = board.getTilesOnSpot(q, r);
+        Stone stoneOnSpotQAndR = tilesOnSpotQAndR.peek();
+        assertEquals(stone, stoneOnSpotQAndR);
     }
 
     /**
@@ -46,7 +46,7 @@ public class BoardSpec {
     @Test
     void givenNewBoardWhenEmptyThenTrue() {
         Board board = new Board();
-        HashMap<ArrayList<Integer>, Stack<Tile>> boardArray = board.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> boardArray = board.getBoard();
         assertTrue(boardArray.isEmpty());
     }
 
@@ -55,22 +55,22 @@ public class BoardSpec {
      */
     @Test
     void givenNewSpotForTileWhenMovedThenTrue() {
-        HashMap<ArrayList<Integer>, Stack<Tile>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Tile>>();
+        HashMap<ArrayList<Integer>, Stack<Stone>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Stone>>();
         ArrayList<Integer> newCoords = new ArrayList();
-        Stack<Tile> movedTile = new Stack<>();
+        Stack<Stone> movedStone = new Stack<>();
         int fromQ = 0;
         int fromR = 0;
         int toQ = 1;
         int toR = 0;
         Board board = new Board();
-        Tile tile = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
-        movedTile.push(tile);
+        Stone stone = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        movedStone.push(stone);
         newCoords.add(toQ);
         newCoords.add(toR);
-        expecBoard.put(newCoords, movedTile);
-        board.setTile(0, 0, tile);
+        expecBoard.put(newCoords, movedStone);
+        board.setTile(0, 0, stone);
         board.moveTile(fromQ, fromR, toQ, toR);
-        HashMap<ArrayList<Integer>, Stack<Tile>> realBoard = board.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> realBoard = board.getBoard();
         assertEquals(expecBoard, realBoard);
     }
 
@@ -79,15 +79,15 @@ public class BoardSpec {
      */
     @Test
     void givenSpotWithTileWhenPutAnotherStoneThenTrue() {
-        Stack<Tile> tilesShouldBe = new Stack<>();
+        Stack<Stone> tilesShouldBe = new Stack<>();
         Board board = new Board();
-        Tile t1 = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Tile t2 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stone t1 = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Stone t2 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
         board.setTile(0, 0, t1);
         board.setTile(0,0, t2);
         tilesShouldBe.push(t1);
         tilesShouldBe.push(t2);
-        Stack<Tile> tilesAre = board.getTilesOnSpot(0, 0);
+        Stack<Stone> tilesAre = board.getTilesOnSpot(0, 0);
         assertEquals(tilesShouldBe, tilesAre);
     }
 
@@ -96,13 +96,13 @@ public class BoardSpec {
      */
     @Test
     void givenStackedTilesOnlyMoveTopThenTrue() {
-        HashMap<ArrayList<Integer>, Stack<Tile>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Tile>>();
+        HashMap<ArrayList<Integer>, Stack<Stone>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Stone>>();
         ArrayList<Integer> stayedCoords = new ArrayList();
         ArrayList<Integer> movedCoords = new ArrayList();
-        Stack<Tile> stayedTile = new Stack<>();
-        Stack<Tile> movedTile = new Stack<>();
-        Tile t1 = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Tile t2 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stack<Stone> stayedStone = new Stack<>();
+        Stack<Stone> movedStone = new Stack<>();
+        Stone t1 = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Stone t2 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
         int fromQ = 0;
         int fromR = 0;
         int toQ = 0;
@@ -111,16 +111,16 @@ public class BoardSpec {
         stayedCoords.add(fromR);
         movedCoords.add(toQ);
         movedCoords.add(toR);
-        stayedTile.push(t1);
-        movedTile.push(t2);
-        expecBoard.put(stayedCoords, stayedTile);
-        expecBoard.put(movedCoords, movedTile);
+        stayedStone.push(t1);
+        movedStone.push(t2);
+        expecBoard.put(stayedCoords, stayedStone);
+        expecBoard.put(movedCoords, movedStone);
 
         Board board = new Board();
         board.setTile(0, 0, t1);
         board.setTile(0,0, t2);
         board.moveTile(fromQ, fromR, toQ, toR);
-        HashMap<ArrayList<Integer>, Stack<Tile>> realBoard = board.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> realBoard = board.getBoard();
 
         assertEquals(expecBoard, realBoard);
     }

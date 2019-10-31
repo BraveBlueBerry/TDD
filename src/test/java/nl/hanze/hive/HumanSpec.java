@@ -2,7 +2,6 @@ package nl.hanze.hive;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -10,35 +9,35 @@ import java.util.Stack;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class PlayerSpec {
+public class HumanSpec {
     @Test
     void givenPlayerHasStartingTilesWhenEqualsThenTrue() {
         Hive.Player color = Hive.Player.WHITE;
-        Player p1 = new Player(color);
+        Human p1 = new Human(color);
         ArrayList<Hive.Tile> startingTiles = new ArrayList<Hive.Tile>();
 
-        Tile queenBeeTile = new Tile(color, Hive.Tile.QUEEN_BEE);
-        Tile spiderTile = new Tile(color, Hive.Tile.SPIDER);
-        Tile soldierAntTile = new Tile(color, Hive.Tile.SOLDIER_ANT);
-        Tile grasshopperTile = new Tile(color, Hive.Tile.GRASSHOPPER);
-        Tile beetleTile = new Tile(color, Hive.Tile.BEETLE);
+        Stone queenBeeStone = new Stone(color, Hive.Tile.QUEEN_BEE);
+        Stone spiderStone = new Stone(color, Hive.Tile.SPIDER);
+        Stone soldierAntStone = new Stone(color, Hive.Tile.SOLDIER_ANT);
+        Stone grasshopperStone = new Stone(color, Hive.Tile.GRASSHOPPER);
+        Stone beetleStone = new Stone(color, Hive.Tile.BEETLE);
 
-        startingTiles.add(queenBeeTile.getTile());
-        startingTiles.add(spiderTile.getTile());
-        startingTiles.add(spiderTile.getTile());
-        startingTiles.add(soldierAntTile.getTile());
-        startingTiles.add(soldierAntTile.getTile());
-        startingTiles.add(soldierAntTile.getTile());
-        startingTiles.add(grasshopperTile.getTile());
-        startingTiles.add(grasshopperTile.getTile());
-        startingTiles.add(grasshopperTile.getTile());
-        startingTiles.add(beetleTile.getTile());
-        startingTiles.add(beetleTile.getTile());
+        startingTiles.add(queenBeeStone.getTile());
+        startingTiles.add(spiderStone.getTile());
+        startingTiles.add(spiderStone.getTile());
+        startingTiles.add(soldierAntStone.getTile());
+        startingTiles.add(soldierAntStone.getTile());
+        startingTiles.add(soldierAntStone.getTile());
+        startingTiles.add(grasshopperStone.getTile());
+        startingTiles.add(grasshopperStone.getTile());
+        startingTiles.add(grasshopperStone.getTile());
+        startingTiles.add(beetleStone.getTile());
+        startingTiles.add(beetleStone.getTile());
 
         ArrayList<Hive.Tile> playerStartingTiles = new ArrayList<>();
-        ArrayList<Tile> p1ST = p1.getTiles();
+        ArrayList<Stone> p1ST = p1.getStones();
         for(int i = 0; i < p1ST.size(); i ++) {
-            Tile t = p1ST.get(i);
+            Stone t = p1ST.get(i);
             playerStartingTiles.add(t.getTile());
         }
 
@@ -47,43 +46,44 @@ public class PlayerSpec {
 
     @Test
     void givenPlayerCanPlayTileThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board b = new Board();
         Game g = new Game(pWhite, pBlack, b);
-        ArrayList<Tile> tiles = pWhite.getTiles();
-        Tile tileToPlay = tiles.get(0);
+        ArrayList<Stone> stones = pWhite.getStones();
+//        Stone stoneToPlay = stones.get(0);
+        Stone stoneToPlay = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
         ArrayList<Integer> coords = new ArrayList<>();
         coords.add(0);
         coords.add(0);
         try {
-            pWhite.playTile(g, tileToPlay, b, coords.get(0), coords.get(1));
+            pWhite.playTile(g, stoneToPlay, b, coords.get(0), coords.get(1));
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
             assertTrue(false);
         }
-        ArrayList<Tile> afterPlayTiles = pWhite.getTiles();
+        ArrayList<Stone> afterPlayStones = pWhite.getStones();
 
-        HashMap<ArrayList<Integer>, Stack<Tile>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Tile>>();
-        Stack<Tile> tileStack = new Stack<Tile>();
-        tileStack.push(tileToPlay);
-        expecBoard.put(coords, tileStack);
-        ArrayList<Tile> expecTiles = new ArrayList<>();
-        expecTiles.addAll(tiles);
-        expecTiles.remove(tileToPlay);
+        HashMap<ArrayList<Integer>, Stack<Stone>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Stone>>();
+        Stack<Stone> stoneStack = new Stack<Stone>();
+        stoneStack.push(stoneToPlay);
+        expecBoard.put(coords, stoneStack);
+        ArrayList<Stone> expecStones = new ArrayList<>();
+        expecStones.addAll(stones);
+        expecStones.remove(stoneToPlay);
 
-        assertEquals(expecTiles, afterPlayTiles);
+        assertEquals(expecStones, afterPlayStones);
         assertEquals(expecBoard, b.getBoard());
     }
 
     @Test
     void givenPlayerCanMoveTileThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board b = new Board();
         Game g = new Game(pWhite, pBlack, b);
-        ArrayList<Tile> tilesP1 = pWhite.getTiles();
-        Tile tileToPlayAndMove = tilesP1.get(0);
+        ArrayList<Stone> tilesP1 = pWhite.getStones();
+        Stone stoneToPlayAndMove = tilesP1.get(0);
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(0);
         fromCoords.add(0);
@@ -91,7 +91,7 @@ public class PlayerSpec {
         toCoords.add(1);
         toCoords.add(0);
         try {
-            pWhite.playTile(g, tileToPlayAndMove, b, fromCoords.get(0), fromCoords.get(1));
+            pWhite.playTile(g, stoneToPlayAndMove, b, fromCoords.get(0), fromCoords.get(1));
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
             assertTrue(false);
@@ -102,37 +102,37 @@ public class PlayerSpec {
             illegalMove.printStackTrace();
         }
 
-        HashMap<ArrayList<Integer>, Stack<Tile>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Tile>>();
-        Stack<Tile> tileStack = new Stack<Tile>();
-        tileStack.push(tileToPlayAndMove);
-        expecBoard.put(toCoords, tileStack);
+        HashMap<ArrayList<Integer>, Stack<Stone>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Stone>>();
+        Stack<Stone> stoneStack = new Stack<Stone>();
+        stoneStack.push(stoneToPlayAndMove);
+        expecBoard.put(toCoords, stoneStack);
 
         assertEquals(expecBoard, b.getBoard());
     }
 
     @Test
     void givenPlayerCanPassThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game g = new Game(pWhite, pBlack, board);
 
-        Player currentPlayer = g.getCurrentPlayer();
-        currentPlayer.pass(g);
-        currentPlayer = g.getCurrentPlayer();
+        Human currentHuman = g.getCurrentHuman();
+        currentHuman.pass(g);
+        currentHuman = g.getCurrentHuman();
 
-        assertEquals(pBlack, currentPlayer);
+        assertEquals(pBlack, currentHuman);
     }
 
     @Test
     void givenPlayerTilesContainsTileToPlayThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
-        ArrayList<Tile> whitesTiles = pWhite.getTiles();
-        Tile queenBee = whitesTiles.get(0);
+        ArrayList<Stone> whitesStones = pWhite.getStones();
+        Stone queenBee = whitesStones.get(0);
 
         try {
             pWhite.playTile(game, queenBee, board, 0, 0);
@@ -147,14 +147,14 @@ public class PlayerSpec {
 
     @Test
     void givenTileOnEmptySpotWhenPlayerPlaysTileThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
-        ArrayList<Tile> whitesTiles = pWhite.getTiles();
-        Tile queenBee = whitesTiles.get(0);
-        Tile spiderTile = whitesTiles.get(1);
+        ArrayList<Stone> whitesStones = pWhite.getStones();
+        Stone queenBee = whitesStones.get(0);
+        Stone spiderStone = whitesStones.get(1);
 
         try {
             pWhite.playTile(game, queenBee, board, 0, 0);
@@ -163,56 +163,56 @@ public class PlayerSpec {
         }
 
         assertThrows(Hive.IllegalMove.class, () -> {
-            pWhite.playTile(game, spiderTile, board, 0, 0);
+            pWhite.playTile(game, spiderStone, board, 0, 0);
         });
     }
 
     @Test
     void givenTilesOnBoardWhenPlayerPlaysTileThenShouldBeNextToOtherTileThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
-        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
-        board.setTile(0,0, tile);
+        Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(0,0, stone);
 
-        ArrayList<Tile> whitesTiles = pWhite.getTiles();
+        ArrayList<Stone> whitesStones = pWhite.getStones();
         try {
-            pWhite.playTile(game, whitesTiles.get(0), board, 0, 1);
+            pWhite.playTile(game, whitesStones.get(0), board, 0, 1);
         } catch (Hive.IllegalMove illegalMove) {
             assertTrue(false, "Shouldn't throw exception yet!");
         }
 
         assertThrows(Hive.IllegalMove.class, () -> {
-            pWhite.playTile(game, whitesTiles.get(5), board, 3, 3);
+            pWhite.playTile(game, whitesStones.get(5), board, 3, 3);
         });
     }
 
     @Test
     void givenBothPlayersHaveTilesOnBoardNewlyPlayedTilesAreNotNextToEnemyTilesThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
         try {
-            pWhite.playTile(game, pWhite.getTiles().get(0), board, 0, 0);
-            pBlack.playTile(game, pBlack.getTiles().get(0), board, 0, 1);
-            pWhite.playTile(game, pWhite.getTiles().get(0), board, 1, -1);
+            pWhite.playTile(game, pWhite.getStones().get(0), board, 0, 0);
+            pBlack.playTile(game, pBlack.getStones().get(0), board, 0, 1);
+            pWhite.playTile(game, pWhite.getStones().get(0), board, 1, -1);
         } catch (Hive.IllegalMove illegalMove) {
             assertTrue(false, "Shouldn't throw exception yet!");
         }
 
         assertThrows(Hive.IllegalMove.class, () -> {
-            pBlack.playTile(game, pBlack.getTiles().get(0), board, 1, 0);
+            pBlack.playTile(game, pBlack.getStones().get(0), board, 1, 0);
         });
     }
 
     @Test
     void givenPlayerPlayedThreeTilesWhenNoQueenBeeIsPlayedThenShouldPlayQueenBee() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
@@ -233,17 +233,17 @@ public class PlayerSpec {
         int q = 0;
         int r = 1;
         for (int i = 0; i < 6; i++) {
-            Player currentPlayer = game.getCurrentPlayer();
-            ArrayList<Tile> tilesCurrentPlayer = currentPlayer.getTiles();
-            Tile tileToPlay = null;
-            for (Tile tile : tilesCurrentPlayer) {
-                if (tile.getTile() == Hive.Tile.SOLDIER_ANT) {
-                    tileToPlay = tile;
+            Human currentHuman = game.getCurrentHuman();
+            ArrayList<Stone> tilesCurrentPlayer = currentHuman.getStones();
+            Stone stoneToPlay = null;
+            for (Stone stone : tilesCurrentPlayer) {
+                if (stone.getTile() == Hive.Tile.SOLDIER_ANT) {
+                    stoneToPlay = stone;
                     break;
                 }
             }
             try {
-                currentPlayer.playTile(game, tileToPlay, board, coords.get(q), coords.get(r));
+                currentHuman.playTile(game, stoneToPlay, board, coords.get(q), coords.get(r));
             } catch (Hive.IllegalMove illegalMove) {
                 illegalMove.printStackTrace();
             }
@@ -252,41 +252,41 @@ public class PlayerSpec {
         }
         // White plays the queen bee, which should be fine
         try {
-            pWhite.playTile(game, pWhite.getTiles().get(0), board, 3, 0);
+            pWhite.playTile(game, pWhite.getStones().get(0), board, 3, 0);
         } catch (Hive.IllegalMove illegalMove) {
             assertTrue(false, "Shouldn't throw exception yet!");
         }
 
         // Black tries to play a spider which shouldnt be allowed.
         assertThrows(Hive.IllegalMove.class, () -> {
-            pBlack.playTile(game, pBlack.getTiles().get(1), board, -1, 0);
+            pBlack.playTile(game, pBlack.getStones().get(1), board, -1, 0);
         });
     }
 
     @Test
     void givenPlayerCanOnlyMovesOwnPlacedTilesThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
         // Play Queen Bee Tile first
-        ArrayList<Tile> tilesWhite = pWhite.getTiles();
-        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        ArrayList<Stone> tilesWhite = pWhite.getStones();
+        Stone queenBeeStone = tilesWhite.get(0); // Queen Bee
         try {
-            pWhite.playTile(game, queenBeeTile, board, 2, 0);
+            pWhite.playTile(game, queenBeeStone, board, 2, 0);
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
         }
 
-        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
         int fromQWhiteTile = 0;
         int fromRWhiteTile = 0;
         int fromQBlackTile = 1;
         int fromRBlackTile = 1;
-        board.setTile(fromQWhiteTile,fromRWhiteTile, tile);
-        tile = new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE);
-        board.setTile(fromQBlackTile,fromRBlackTile, tile);
+        board.setTile(fromQWhiteTile,fromRWhiteTile, stone);
+        stone = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        board.setTile(fromQBlackTile,fromRBlackTile, stone);
 
         try {
             pWhite.moveTile(game, board, fromQWhiteTile, fromRWhiteTile, 0,1);
@@ -301,13 +301,13 @@ public class PlayerSpec {
 
     @Test
     void givenPlayerCanOnlyMoveTilesWhenQueenBeePlayedThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
-        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
         int fromQWhiteTile = 0;
         int fromRWhiteTile = 0;
-        board.setTile(fromQWhiteTile,fromRWhiteTile, tile);
+        board.setTile(fromQWhiteTile,fromRWhiteTile, stone);
         Game game = new Game(pWhite, pBlack, board);
         // No queen bee has been played
         assertThrows(Hive.IllegalMove.class, () -> {
@@ -315,10 +315,10 @@ public class PlayerSpec {
         });
 
         // Play Queen Bee Tile
-        ArrayList<Tile> tilesWhite = pWhite.getTiles();
-        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        ArrayList<Stone> tilesWhite = pWhite.getStones();
+        Stone queenBeeStone = tilesWhite.get(0); // Queen Bee
         try {
-            pWhite.playTile(game, queenBeeTile, board, fromQWhiteTile + 1, fromQWhiteTile);
+            pWhite.playTile(game, queenBeeStone, board, fromQWhiteTile + 1, fromQWhiteTile);
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
         }
@@ -332,22 +332,22 @@ public class PlayerSpec {
 
     @Test
     void givenTileNeighboursATileWhenMovedThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
         // Play Queen Bee Tile
-        ArrayList<Tile> tilesWhite = pWhite.getTiles();
-        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        ArrayList<Stone> tilesWhite = pWhite.getStones();
+        Stone queenBeeStone = tilesWhite.get(0); // Queen Bee
         try {
-            pWhite.playTile(game, queenBeeTile, board,  0, 0);
+            pWhite.playTile(game, queenBeeStone, board,  0, 0);
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
         }
 
-        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
-        board.setTile(1,0, tile);
+        Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(1,0, stone);
 
         assertThrows(Hive.IllegalMove.class, () -> {
             pWhite.moveTile(game, board, 1, 0, 3, 0);
@@ -356,24 +356,24 @@ public class PlayerSpec {
 
     @Test
     void givenNoSeparateGroupsWhenTileMovedThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
 
         // Play Queen Bee Tile
-        ArrayList<Tile> tilesWhite = pWhite.getTiles();
-        Tile queenBeeTile = tilesWhite.get(0); // Queen Bee
+        ArrayList<Stone> tilesWhite = pWhite.getStones();
+        Stone queenBeeStone = tilesWhite.get(0); // Queen Bee
         try {
-            pWhite.playTile(game, queenBeeTile, board,  0, 0);
+            pWhite.playTile(game, queenBeeStone, board,  0, 0);
         } catch (Hive.IllegalMove illegalMove) {
             illegalMove.printStackTrace();
         }
 
-        Tile tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
-        board.setTile(1, 0, tile);
-        tile = new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE);
-        board.setTile(-1, 0, tile);
+        Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(1, 0, stone);
+        stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(-1, 0, stone);
 
         assertThrows(Hive.IllegalMove.class, () -> {
             pWhite.moveTile(game, board, 0, 0, 2, 0);

@@ -1,40 +1,39 @@
 package nl.hanze.hive;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class Player {
+public class Human {
     private final Hive.Player color;
-    private ArrayList<Tile> tiles;
+    private ArrayList<Stone> stones;
     private int amountOfStartingTiles;
 
-    public Player(Hive.Player color) {
-        tiles = new ArrayList<Tile>();
-        Tile queenBeeTile = new Tile(color, Hive.Tile.QUEEN_BEE);
-        Tile spiderTile1 = new Tile(color, Hive.Tile.SPIDER);
-        Tile spiderTile2 = new Tile(color, Hive.Tile.SPIDER);
-        Tile soldierAntTile1 = new Tile(color, Hive.Tile.SOLDIER_ANT);
-        Tile soldierAntTile2 = new Tile(color, Hive.Tile.SOLDIER_ANT);
-        Tile soldierAntTile3 = new Tile(color, Hive.Tile.SOLDIER_ANT);
-        Tile grasshopperTile1 = new Tile(color, Hive.Tile.GRASSHOPPER);
-        Tile grasshopperTile2 = new Tile(color, Hive.Tile.GRASSHOPPER);
-        Tile grasshopperTile3 = new Tile(color, Hive.Tile.GRASSHOPPER);
-        Tile beetleTile1 = new Tile(color, Hive.Tile.BEETLE);
-        Tile beetleTile2 = new Tile(color, Hive.Tile.BEETLE);
+    public Human(Hive.Player color) {
+        stones = new ArrayList<Stone>();
+        Stone queenBeeStone = new Stone(color, Hive.Tile.QUEEN_BEE);
+        Stone spiderStone1 = new Stone(color, Hive.Tile.SPIDER);
+        Stone spiderStone2 = new Stone(color, Hive.Tile.SPIDER);
+        Stone soldierAntStone1 = new Stone(color, Hive.Tile.SOLDIER_ANT);
+        Stone soldierAntStone2 = new Stone(color, Hive.Tile.SOLDIER_ANT);
+        Stone soldierAntStone3 = new Stone(color, Hive.Tile.SOLDIER_ANT);
+        Stone grasshopperStone1 = new Stone(color, Hive.Tile.GRASSHOPPER);
+        Stone grasshopperStone2 = new Stone(color, Hive.Tile.GRASSHOPPER);
+        Stone grasshopperStone3 = new Stone(color, Hive.Tile.GRASSHOPPER);
+        Stone beetleStone1 = new Stone(color, Hive.Tile.BEETLE);
+        Stone beetleStone2 = new Stone(color, Hive.Tile.BEETLE);
 
-        tiles.add(queenBeeTile);
-        tiles.add(spiderTile1);
-        tiles.add(spiderTile2);
-        tiles.add(soldierAntTile1);
-        tiles.add(soldierAntTile2);
-        tiles.add(soldierAntTile3);
-        tiles.add(grasshopperTile1);
-        tiles.add(grasshopperTile2);
-        tiles.add(grasshopperTile3);
-        tiles.add(beetleTile1);
-        tiles.add(beetleTile2);
+        stones.add(queenBeeStone);
+        stones.add(spiderStone1);
+        stones.add(spiderStone2);
+        stones.add(soldierAntStone1);
+        stones.add(soldierAntStone2);
+        stones.add(soldierAntStone3);
+        stones.add(grasshopperStone1);
+        stones.add(grasshopperStone2);
+        stones.add(grasshopperStone3);
+        stones.add(beetleStone1);
+        stones.add(beetleStone2);
 
-        this.amountOfStartingTiles = tiles.size();
+        this.amountOfStartingTiles = stones.size();
         this.color = color;
     }
 
@@ -42,10 +41,10 @@ public class Player {
         return color;
     }
 
-    public ArrayList<Tile> getTiles() { return tiles; }
+    public ArrayList<Stone> getStones() { return stones; }
 
-    public void playTile(Game g, Tile tileToPlay, Board b, Integer q, Integer r) throws Hive.IllegalMove {
-        if (!tiles.contains(tileToPlay)) { throw new Hive.IllegalMove("Player must play a tile he owns"); }
+    public void playTile(Game g, Stone stoneToPlay, Board b, Integer q, Integer r) throws Hive.IllegalMove {
+        if (!stones.contains(stoneToPlay)) { throw new Hive.IllegalMove("Player must play a tile he owns"); }
         if (!b.getTilesOnSpot(q, r).empty()) { throw new Hive.IllegalMove("Spot already taken !!!"); }
         boolean neighbourFound = false;
         boolean neighbouringEnemy = false;
@@ -62,41 +61,41 @@ public class Player {
         if (!neighbourFound && !b.getBoard().isEmpty()) { throw new Hive.IllegalMove("Tile needs neighbour"); }
         if (neighbouringEnemy && b.hasTilesOfPlayer(this)) { throw new Hive.IllegalMove("Placed tile is neighbouring an enemy tile"); }
         boolean queenbeeTileAvailable = false;
-        for (Tile tile : tiles) {
-            if (tile.getTile() == Hive.Tile.QUEEN_BEE) {
+        for (Stone stone : stones) {
+            if (stone.getTile() == Hive.Tile.QUEEN_BEE) {
                 queenbeeTileAvailable = true;
                 break;
             }
         }
         if (queenbeeTileAvailable &&
-                tiles.size() <= (amountOfStartingTiles - 3) &&
-                tileToPlay.getTile() != Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play the queen bee tile"); }
-        b.setTile(q, r, tileToPlay);
-        tiles.remove(tileToPlay);
+                stones.size() <= (amountOfStartingTiles - 3) &&
+                stoneToPlay.getTile() != Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play the queen bee tile"); }
+        b.setTile(q, r, stoneToPlay);
+        stones.remove(stoneToPlay);
         g.nextTurn();
     }
 
     public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
         // Check if Queen Bee has been played
-        for(Tile t : tiles) {
+        for(Stone t : this.stones) {
             if(t.getTile() == Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play Queen Bee first before moving any tiles"); }
         }
 
         // Check if the tile to be moved is from this player
-        HashMap<ArrayList<Integer>, Stack<Tile>> boardMap = b.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> boardMap = b.getBoard();
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
-        Stack<Tile> tiles = boardMap.get(fromCoords);
-        Tile tileToMove = tiles.peek();
-        if (tileToMove.getColor() != this.color) { throw new Hive.IllegalMove("Can only move tiles of your own color"); }
+        Stack<Stone> stones = boardMap.get(fromCoords);
+        Stone stoneToMove = stones.peek();
+        if (stoneToMove.getColor() != this.color) { throw new Hive.IllegalMove("Can only move tiles of your own color"); }
 
         // Check if the moved tile will land next to a tile
         boolean foundNeighbour = false;
         ArrayList<ArrayList<Integer>> surroundingToCoords = b.getSurroundingTiles(toQ, toR);
         for (ArrayList<Integer> coords : surroundingToCoords) {
             if (boardMap.containsKey(coords)) {
-                Stack<Tile> st = boardMap.get(coords);
+                Stack<Stone> st = boardMap.get(coords);
                 if (!st.empty()) { foundNeighbour = true; }
             }
         }

@@ -3,7 +3,6 @@ package nl.hanze.hive;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,33 +10,33 @@ public class GameSpec {
 
     @Test
     void givenWhiteStartsWhenNewGameThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game game = new Game(pWhite, pBlack, board);
-        Player currentPlayer = game.getCurrentPlayer();
+        Human currentHuman = game.getCurrentHuman();
 
-        assertEquals(currentPlayer, pWhite);
+        assertEquals(currentHuman, pWhite);
     }
 
     @Test
     void givenPlayerWonWhenQueenBeeIsSurroundedThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
-        Tile queenBeeTile = new Tile(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
-        ArrayList<Tile> tilesToSurroundQueenBee = new ArrayList<>();
-        Tile spiderTile1 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
-        Tile spiderTile2 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
-        Tile spiderTile3 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
-        Tile spiderTile4 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
-        Tile spiderTile5 = new Tile(Hive.Player.BLACK, Hive.Tile.SPIDER);
-        tilesToSurroundQueenBee.add(spiderTile1);
-        tilesToSurroundQueenBee.add(spiderTile2);
-        tilesToSurroundQueenBee.add(spiderTile3);
-        tilesToSurroundQueenBee.add(spiderTile4);
-        tilesToSurroundQueenBee.add(spiderTile5);
-        board.setTile(0, 0, queenBeeTile);
+        Stone queenBeeStone = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        ArrayList<Stone> tilesToSurroundQueenBee = new ArrayList<>();
+        Stone spiderStone1 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stone spiderStone2 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stone spiderStone3 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stone spiderStone4 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        Stone spiderStone5 = new Stone(Hive.Player.BLACK, Hive.Tile.SPIDER);
+        tilesToSurroundQueenBee.add(spiderStone1);
+        tilesToSurroundQueenBee.add(spiderStone2);
+        tilesToSurroundQueenBee.add(spiderStone3);
+        tilesToSurroundQueenBee.add(spiderStone4);
+        tilesToSurroundQueenBee.add(spiderStone5);
+        board.setTile(0, 0, queenBeeStone);
         ArrayList<ArrayList<Integer>> surroundingTiles = board.getSurroundingTiles(0, 0);
         ArrayList<Integer> playCoords = null;
         for(int i = 0; i < surroundingTiles.size(); i ++) {
@@ -52,7 +51,7 @@ public class GameSpec {
         Boolean isWinner = game.isThereAWinner();
         assertFalse(isWinner);
 
-        board.setTile(playCoords.get(0), playCoords.get(1), new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE));
+        board.setTile(playCoords.get(0), playCoords.get(1), new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE));
         game = new Game (pWhite, pBlack, board);
 
         isWinner = game.isThereAWinner();
@@ -61,16 +60,16 @@ public class GameSpec {
 
     @Test
     void givenItsADrawWhenBothPlayersWonThenTrue() {
-        Player pWhite = new Player(Hive.Player.WHITE);
-        Player pBlack = new Player(Hive.Player.BLACK);
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
-        ArrayList<Tile> whiteTilesForBoard = new ArrayList<>();
-        ArrayList<Tile> blackTilesForBoard = new ArrayList<>();
-        Tile whiteQueen = new Tile(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
-        Tile blackQueen = new Tile(Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
+        ArrayList<Stone> whiteTilesForBoard = new ArrayList<>();
+        ArrayList<Stone> blackTilesForBoard = new ArrayList<>();
+        Stone whiteQueen = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        Stone blackQueen = new Stone(Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
         for (int i = 0; i < 5; i ++) {
-            whiteTilesForBoard.add(new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE));
-            blackTilesForBoard.add(new Tile(Hive.Player.BLACK, Hive.Tile.BEETLE));
+            whiteTilesForBoard.add(new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE));
+            blackTilesForBoard.add(new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE));
         }
 
         board.setTile(-1, 0, whiteQueen);
@@ -98,7 +97,7 @@ public class GameSpec {
         Game game = new Game(pWhite, pBlack, board);
         assertFalse(game.getIsDraw());
 
-        board.setTile(0, 0, new Tile(Hive.Player.WHITE, Hive.Tile.BEETLE));
+        board.setTile(0, 0, new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE));
         game = new Game(pWhite, pBlack, board);
         assertTrue(game.getIsDraw());
     }

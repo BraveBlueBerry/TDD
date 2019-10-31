@@ -1,46 +1,48 @@
 package nl.hanze.hive;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
 public class Game {
 
-    private Player currentPlayer;
-    private Player pWhite;
-    private Player pBlack;
+    private Human currentHuman;
+    private Human pWhite;
+    private Human pBlack;
     private Board board;
     private Hive.Player winner;
     private boolean isDraw;
 
-    public Game(Player pWhite, Player pBlack, Board board) {
-        this.currentPlayer = pWhite;
+    public Game(Human pWhite, Human pBlack, Board board) {
+        this.currentHuman = pWhite;
         this.pWhite = pWhite;
         this.pBlack = pBlack;
         this.board = board;
         this.isDraw = false;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+    public Human getCurrentHuman() {
+        return currentHuman;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     public void nextTurn() {
-        if (this.currentPlayer == pWhite) {
+        if (this.currentHuman == pWhite) {
             if (isThereAWinner()) {
                 // Game is over
                 // winner = pWhite.getColor();
             } else {
-                currentPlayer = pBlack;
+                currentHuman = pBlack;
             }
         } else {
             if (isThereAWinner()) {
                 // Game is over
                 // winner = pBlack.getColor();
             } else {
-                currentPlayer = pWhite;
+                currentHuman = pWhite;
             }
 
         }
@@ -49,7 +51,7 @@ public class Game {
     public Boolean isThereAWinner() {
         winner = null;
         boolean isThereAWinner = true;
-        HashMap<ArrayList<Integer>, Stack<Tile>> b = board.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> b = board.getBoard();
         if (b.isEmpty()) { return isThereAWinner = false; }
         ArrayList<ArrayList<Integer>> queens = new ArrayList<>();
         for (ArrayList<Integer> i : b.keySet()) {
@@ -85,11 +87,11 @@ public class Game {
 //                }
 //            }
         }
-        ArrayList<Tile> lostQueens = new ArrayList<>();
+        ArrayList<Stone> lostQueens = new ArrayList<>();
         for(ArrayList<Integer> queen: queens) {
             int q = queen.get(0);
             int r = queen.get(1);
-            Tile queenTile = board.getTilesOnSpot(q, r).peek();
+            Stone queenStone = board.getTilesOnSpot(q, r).peek();
             boolean queenlost = true;
 
             for(ArrayList<Integer> surroundingTile: board.getSurroundingTiles(q, r)){
@@ -100,7 +102,7 @@ public class Game {
                 }
             }
             if (queenlost) {
-                lostQueens.add(queenTile);
+                lostQueens.add(queenStone);
             }
         }
         if(lostQueens.size() > 1) {
@@ -115,5 +117,9 @@ public class Game {
         return isThereAWinner;
     }
 
-    public Boolean getIsDraw() { isThereAWinner(); return isDraw; }
+    public boolean getIsDraw() { isThereAWinner(); return isDraw; }
+
+    public Hive.Player getWinner() {
+        return winner;
+    }
 }
