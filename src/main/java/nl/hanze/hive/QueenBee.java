@@ -7,8 +7,8 @@ public class QueenBee {
         ArrayList<ArrayList<Integer>> possibleMoves = new ArrayList<>();
         ArrayList<ArrayList<Integer>> maybeMoves = board.getSurroundingTiles(fromQ, fromR);
         for (ArrayList<Integer> maybeMove : maybeMoves) {
-            if (board.canStoneSlide(fromQ, fromR, maybeMove.get(0), maybeMove.get(1)) &&
-                    board.getHeightStoneStackOnSpot(maybeMove.get(0), maybeMove.get(1)) == 0) {
+            if (board.canStoneSlide(fromQ, fromR, maybeMove.get(0), maybeMove.get(1))
+                    && board.getHeightStoneStackOnSpot(maybeMove.get(0), maybeMove.get(1)) == 0) {
                 possibleMoves.add(maybeMove);
             }
         }

@@ -125,7 +125,7 @@ public class Board {
         int heightN2 = getHeightStoneStackOnSpot(duplicateCoords.get(1).get(0), duplicateCoords.get(1).get(1));
         int heightFrom = getHeightStoneStackOnSpot(fromQ, fromR);
         int heightTo = getHeightStoneStackOnSpot(toQ, toR);
-        if (heightN1 == 0 && heightN2 == 0 && heightTo == 0 && heightFrom > 1) { return false; } // requirement 6c
+        if (heightN1 == 0 && heightN2 == 0 && heightTo == 0 && heightFrom == 1) { return false; } // requirement 6c
         boolean nWouldBeTooHigh = false;
         if (heightN1 > heightFrom - 1 || heightN1 > heightTo || heightN2 > heightFrom - 1 || heightN2 > heightTo) {
             nWouldBeTooHigh = true;

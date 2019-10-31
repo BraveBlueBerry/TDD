@@ -30,9 +30,7 @@ public class HiveGame implements Hive {
     @Override
     public boolean isWinner(Player player) {
         if(game.isThereAWinner()) {
-            if(game.getWinner() == player) {
-                return true;
-            }
+            return game.getWinner() == player;
         }
         return false;
     }
