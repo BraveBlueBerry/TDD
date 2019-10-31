@@ -94,4 +94,50 @@ public class Board {
         }
         return false;
     }
+
+    private int getHeightStoneStackOnSpot(int q, int r) {
+        ArrayList<Integer> coords = new ArrayList<>();
+        coords.add(q);
+        coords.add(r);
+        int amountOfTilesOnSpot = 0;
+        if (board.containsKey(coords)) {
+            Stack tilesOnSpot = board.get(coords);
+            amountOfTilesOnSpot = tilesOnSpot.size();
+        }
+        return amountOfTilesOnSpot;
+    }
+
+    public boolean canStoneSlide(int fromQ, int fromR, int toQ, int toR) {
+        ArrayList<Integer> fromCoords = new ArrayList<>();
+        fromCoords.add(fromQ);
+        fromCoords.add(fromR);
+        ArrayList<Integer> toCoords = new ArrayList<>();
+        toCoords.add(toQ);
+        toCoords.add(toR);
+        ArrayList<ArrayList<Integer>> surroundingFromTile = getSurroundingTiles(fromQ, fromR);
+        ArrayList<ArrayList<Integer>> surroundingToTile = getSurroundingTiles(toQ, toR);
+        ArrayList<ArrayList<Integer>> duplicateCoords = new ArrayList<>();
+        for (ArrayList<Integer> coords : surroundingFromTile) {
+            if (surroundingToTile.contains(coords)) { duplicateCoords.add(coords); }
+        }
+        if (duplicateCoords.size() != 2) { return false; } // From and to are not next to each other
+        int heightN1 = getHeightStoneStackOnSpot(duplicateCoords.get(0).get(0), duplicateCoords.get(0).get(1));
+        int heightN2 = getHeightStoneStackOnSpot(duplicateCoords.get(1).get(0), duplicateCoords.get(1).get(1));
+        if (heightN1 == 0 && heightN2 == 0) { return false; } // requirement 6c
+        int heightFrom = getHeightStoneStackOnSpot(fromQ, fromR);
+        int heightTo = getHeightStoneStackOnSpot(toQ, toR);
+        boolean nWouldBeTooHigh = false;
+        if (heightN1 > heightFrom - 1 || heightN1 > heightTo || heightN2 > heightFrom - 1 || heightN2 > heightTo) {
+            nWouldBeTooHigh = true;
+        };
+        int amountTrappingStones = 0;
+        for (ArrayList<Integer> coords : duplicateCoords) {
+            if (board.containsKey(coords)) {
+                amountTrappingStones += 1;
+            }
+        }
+        if (amountTrappingStones == 2 && nWouldBeTooHigh) { return false; }
+
+        return true;
+    }
 }
