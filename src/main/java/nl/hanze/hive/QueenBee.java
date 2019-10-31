@@ -2,13 +2,13 @@ package nl.hanze.hive;
 
 import java.util.ArrayList;
 
-public class Beetle {
-
+public class QueenBee {
     private ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
         ArrayList<ArrayList<Integer>> possibleMoves = new ArrayList<>();
         ArrayList<ArrayList<Integer>> maybeMoves = board.getSurroundingTiles(fromQ, fromR);
         for (ArrayList<Integer> maybeMove : maybeMoves) {
-            if (board.canStoneSlide(fromQ, fromR, maybeMove.get(0), maybeMove.get(1))) {
+            if (board.canStoneSlide(fromQ, fromR, maybeMove.get(0), maybeMove.get(1)) &&
+                    board.getHeightStoneStackOnSpot(maybeMove.get(0), maybeMove.get(1)) == 0) {
                 possibleMoves.add(maybeMove);
             }
         }
@@ -25,3 +25,4 @@ public class Beetle {
         return false;
     }
 }
+
