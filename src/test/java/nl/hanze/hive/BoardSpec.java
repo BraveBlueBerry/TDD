@@ -126,7 +126,7 @@ public class BoardSpec {
     }
 
     @Test
-    void givenStoneCantSlideWhenTrappedThenTrue() {
+    void givenStoneCanSlideThenTrue() {
         Board board = new Board();
         Stone stoneBeetle1 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
         Stone stoneBeetle2 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
@@ -139,12 +139,42 @@ public class BoardSpec {
         int toR = 0;
         boolean canStoneSlide = board.canStoneSlide(fromQ, fromR, toQ, toR);
         assertTrue(canStoneSlide);
+    }
 
+    @Test
+    void givenStoneCantSlideWhenTrappedByStonesOnSameHeightThenTrue() {
+        Board board = new Board();
+        Stone stoneBeetle1 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stoneBeetle2 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stoneQueenBee = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        // Two trapping stones
+        board.setTile(0,-1, stoneBeetle1);
         board.setTile(1,0, stoneBeetle2);
-        canStoneSlide = board.canStoneSlide(fromQ, fromR, toQ, toR);
-        assertFalse(canStoneSlide);
+        int fromQ = 1;
+        int fromR= -1;
+        board.setTile(fromQ,fromR, stoneQueenBee);
+        int toQ = 0;
+        int toR = 0;
 
-        // When from and to place are higher than its neighbours it shoul be possible to slide
+        boolean canStoneSlide = board.canStoneSlide(fromQ, fromR, toQ, toR);
+        assertFalse(canStoneSlide);
+    }
+
+    @Test
+    void givenStoneCanSlideWhenNotTrappedBecauseTheyAreLowerThenTrue() {
+        Board board = new Board();
+        Stone stoneBeetle1 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stoneBeetle2 = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        Stone stoneQueenBee = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        // Two trapping stones
+        board.setTile(0,-1, stoneBeetle1);
+        board.setTile(1,0, stoneBeetle2);
+        int fromQ = 1;
+        int fromR= -1;
+        board.setTile(fromQ,fromR, stoneQueenBee);
+        int toQ = 0;
+        int toR = 0;
+
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
@@ -155,7 +185,7 @@ public class BoardSpec {
         board.setTile(fromQ, fromR, stoneBeetle3);
         board.setTile(toQ,toR, stoneBeetle4);
         board.setTile(fromQ,fromR, stoneQueenBee); // Place Queen Bee on top
-        canStoneSlide = board.canStoneSlide(fromQ, fromR, toQ, toR);
+        boolean canStoneSlide = board.canStoneSlide(fromQ, fromR, toQ, toR);
         assertTrue(canStoneSlide);
     }
 

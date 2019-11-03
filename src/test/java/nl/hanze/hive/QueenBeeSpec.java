@@ -19,8 +19,21 @@ public class QueenBeeSpec {
         board.setTile(fromQ, fromR, stoneQueenBee);
         board.setTile(1,-1, stoneBeetle);
         boolean canQueenBeeMoveOneTile = queenBee.isMoveAllowed(fromQ, fromR, toQ, toR, board);
-        toQ = 2;
         assertTrue(canQueenBeeMoveOneTile);
+    }
+
+    @Test
+    void givenBeetleCanSlideTwoTilesThenFalse() {
+        Board board = new Board();
+        QueenBee queenBee = new QueenBee();
+        int fromQ = 0;
+        int fromR = 0;
+        int toQ = 2;
+        int toR = 0;
+        Stone stoneQueenBee = new Stone(Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        Stone stoneBeetle = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
+        board.setTile(fromQ, fromR, stoneQueenBee);
+        board.setTile(1,-1, stoneBeetle);
         boolean canQueenBeeMoveTwoTiles = queenBee.isMoveAllowed(fromQ, fromR, toQ, toR, board);
         assertFalse(canQueenBeeMoveTwoTiles);
     }

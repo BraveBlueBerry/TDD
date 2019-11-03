@@ -20,6 +20,16 @@ public class GameSpec {
     }
 
     @Test
+    void givenThereIsNoWinnerWhenNoWinningConditionsAreMetThenTrue() {
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
+        Board board = new Board();
+        Game game = new Game(pWhite, pBlack, board);
+        Boolean isWinner = game.isThereAWinner();
+        assertFalse(isWinner);
+    }
+
+    @Test
     void givenPlayerWonWhenQueenBeeIsSurroundedThenTrue() {
         Human pWhite = new Human(Hive.Player.WHITE);
         Human pBlack = new Human(Hive.Player.BLACK);
@@ -47,15 +57,19 @@ public class GameSpec {
                 board.setTile(coords.get(0), coords.get(1), tilesToSurroundQueenBee.get(i));
             }
         }
-        Game game = new Game(pWhite, pBlack, board);
-        Boolean isWinner = game.isThereAWinner();
-        assertFalse(isWinner);
-
         board.setTile(playCoords.get(0), playCoords.get(1), new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE));
-        game = new Game (pWhite, pBlack, board);
-
-        isWinner = game.isThereAWinner();
+        Game game = new Game (pWhite, pBlack, board);
+        boolean isWinner = game.isThereAWinner();
         assertTrue(isWinner);
+    }
+
+    @Test
+    void givenItIsNotADrawWhenNotAllPlayersWonThenTrue() {
+        Human pWhite = new Human(Hive.Player.WHITE);
+        Human pBlack = new Human(Hive.Player.BLACK);
+        Board board = new Board();
+        Game game = new Game(pWhite, pBlack, board);
+        assertFalse(game.getIsDraw());
     }
 
     @Test
@@ -94,11 +108,8 @@ public class GameSpec {
         }
 
         // Play the last tile that should make it a draw
-        Game game = new Game(pWhite, pBlack, board);
-        assertFalse(game.getIsDraw());
-
         board.setTile(0, 0, new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE));
-        game = new Game(pWhite, pBlack, board);
+        Game game = new Game(pWhite, pBlack, board);
         assertTrue(game.getIsDraw());
     }
 }
