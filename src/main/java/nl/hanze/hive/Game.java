@@ -60,32 +60,6 @@ public class Game {
             if(b.get(i).peek().getTile() == Hive.Tile.QUEEN_BEE) {
                 queens.add(i);
             }
-//                System.out.println("Found queenbee: " + b.get(i).peek().getColor() + " " + b.get(i).peek().getTile());
-//                ArrayList<ArrayList<Integer>> surroundingTilesOfQueenBee =
-//                        board.getSurroundingTiles(i.get(0), i.get(1));
-//                System.out.println(surroundingTilesOfQueenBee);
-//                for (ArrayList<Integer> coords : surroundingTilesOfQueenBee) {
-//                    System.out.println(coords);
-//                    Stack<Tile> tilesOnSpot = board.getTilesOnSpot(coords.get(0), coords.get(1));
-//                    if (tilesOnSpot.empty()) {
-//                        System.out.println("There is a tile empty!");
-//                        isThereAWinner = false;
-//                        winner = null;
-//                        isDraw = false;
-//                    }
-//                }
-//            } else { isThereAWinner = false; }
-//            System.out.println("Is there a winner? " + isThereAWinner);
-//            if (isThereAWinner) {
-//                System.out.println("There's a winner");
-//                if (winner == null) {
-//                    System.out.println("setting winner");
-//                    winner = (colorOfQueenBee == Hive.Player.BLACK ? Hive.Player.BLACK : Hive.Player.WHITE);
-//                } else {
-//                    System.out.println("setting it on trueeee");
-//                    isDraw = true;
-//                }
-//            }
         }
         ArrayList<Stone> lostQueens = new ArrayList<>();
         for(ArrayList<Integer> queen: queens) {

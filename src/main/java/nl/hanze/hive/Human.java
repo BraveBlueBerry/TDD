@@ -124,6 +124,28 @@ public class Human {
         }
         if(visited.size() != lengthBoardMap) { throw new Hive.IllegalMove("There are separate groups"); }
 
+        // Is this move allowed for the tile to move
+        switch(stoneToMove.getTile()) {
+            case BEETLE:
+                Beetle beetle = new Beetle();
+                if(!beetle.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("Beetle can't make this move"); }
+                break;
+            case GRASSHOPPER:
+                // code block
+                break;
+            case QUEEN_BEE:
+                QueenBee queenBee = new QueenBee();
+                if(!queenBee.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
+                break;
+            case SOLDIER_ANT:
+                // code block
+                break;
+            case SPIDER:
+                // code block
+                break;
+            default:
+                // code block
+        }
         b.moveTile(fromQ, fromR, toQ, toR);
         g.nextTurn();
     }
