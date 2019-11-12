@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SoldierAntSpec {
     @Test
-    void givenSpiderCanSlideThreeTilesThenTrue() {
+    void givenSoliderAntCanMoveALotThenTrue() {
         Board board = new Board();
         SoldierAnt soldierAnt = new SoldierAnt();
         int fromQ = 0;
