@@ -131,7 +131,8 @@ public class Human {
                 if(!beetle.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("Beetle can't make this move"); }
                 break;
             case GRASSHOPPER:
-                // code block
+                Grasshopper grasshopper = new Grasshopper();
+                if(!grasshopper.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("Grasshopper can't make this move"); }
                 break;
             case QUEEN_BEE:
                 QueenBee queenBee = new QueenBee();
@@ -139,11 +140,11 @@ public class Human {
                 break;
             case SOLDIER_ANT:
                 SoldierAnt soldierAnt = new SoldierAnt();
-                if(!soldierAnt.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
+                if(!soldierAnt.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("Solider Ant can't make this move"); }
                 break;
             case SPIDER:
                 Spider spider = new Spider();
-                if(!spider.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
+                if(!spider.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("Spider can't make this move"); }
                 break;
             default:
                 throw new Hive.IllegalMove("The game does not recognize this type of stone");
