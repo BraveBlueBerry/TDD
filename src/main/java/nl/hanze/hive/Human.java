@@ -138,13 +138,15 @@ public class Human {
                 if(!queenBee.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
                 break;
             case SOLDIER_ANT:
-                // code block
+                SoldierAnt soldierAnt = new SoldierAnt();
+                if(!soldierAnt.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
                 break;
             case SPIDER:
-                // code block
+                Spider spider = new Spider();
+                if(!spider.isMoveAllowed(fromQ, fromR, toQ, toR, b)) { throw new Hive.IllegalMove("QueenBee can't make this move"); }
                 break;
             default:
-                // code block
+                throw new Hive.IllegalMove("The game does not recognize this type of stone");
         }
         b.moveTile(fromQ, fromR, toQ, toR);
         g.nextTurn();

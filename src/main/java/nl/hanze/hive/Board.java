@@ -107,7 +107,13 @@ public class Board {
         return amountOfTilesOnSpot;
     }
 
+    public boolean canStoneSlide(int fromQ, int fromR, int toQ, int toR, int maxHeightFrom) {
+        return canStoneSlidePrivate(fromQ, fromR, toQ, toR, maxHeightFrom);
+    }
     public boolean canStoneSlide(int fromQ, int fromR, int toQ, int toR) {
+        return canStoneSlidePrivate(fromQ, fromR, toQ, toR, 1);
+    }
+    private boolean canStoneSlidePrivate(int fromQ, int fromR, int toQ, int toR, int maxHeightFrom) {
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
@@ -125,7 +131,15 @@ public class Board {
         int heightN2 = getHeightStoneStackOnSpot(duplicateCoords.get(1).get(0), duplicateCoords.get(1).get(1));
         int heightFrom = getHeightStoneStackOnSpot(fromQ, fromR);
         int heightTo = getHeightStoneStackOnSpot(toQ, toR);
-        if (heightN1 == 0 && heightN2 == 0 && heightTo == 0 && heightFrom == 1) { return false; } // requirement 6c
+        if(maxHeightFrom == 1) {
+            if (heightN1 == 0 && heightN2 == 0 && heightTo == 0 && heightFrom == 1) {
+                return false;
+            } // requirement 6c
+        } else {
+            if (heightN1 == 0 && heightN2 == 0 && heightTo == 0) {
+                return false;
+            } // requirement 6c fiction
+        }
         boolean nWouldBeTooHigh = false;
         if (heightN1 > heightFrom - 1 || heightN1 > heightTo || heightN2 > heightFrom - 1 || heightN2 > heightTo) {
             nWouldBeTooHigh = true;

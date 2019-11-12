@@ -90,6 +90,11 @@ public class HumanSpec {
         ArrayList<Integer> toCoords = new ArrayList<>();
         toCoords.add(1);
         toCoords.add(0);
+        ArrayList<Integer> extraCoords = new ArrayList<>();
+        extraCoords.add(0);
+        extraCoords.add(1);
+        Stone extraStone = new Stone(Hive.Player.BLACK, Hive.Tile.BEETLE);
+        b.setTile(0,1, extraStone);
         try {
             pWhite.playTile(g, stoneToPlayAndMove, b, fromCoords.get(0), fromCoords.get(1));
         } catch (Hive.IllegalMove illegalMove) {
@@ -104,8 +109,12 @@ public class HumanSpec {
 
         HashMap<ArrayList<Integer>, Stack<Stone>> expecBoard = new HashMap<ArrayList<Integer>, Stack<Stone>>();
         Stack<Stone> stoneStack = new Stack<Stone>();
+        Stack<Stone> extraStoneStack = new Stack<Stone>();
         stoneStack.push(stoneToPlayAndMove);
+        extraStoneStack.push(extraStone);
         expecBoard.put(toCoords, stoneStack);
+        expecBoard.put(extraCoords, extraStoneStack);
+
 
         assertEquals(expecBoard, b.getBoard());
     }
@@ -280,7 +289,7 @@ public class HumanSpec {
         }
 
         Stone stone = new Stone(Hive.Player.WHITE, Hive.Tile.BEETLE);
-        int fromQWhiteTile = 0;
+        int fromQWhiteTile = 1;
         int fromRWhiteTile = 0;
         int fromQBlackTile = 1;
         int fromRBlackTile = 1;
@@ -291,6 +300,7 @@ public class HumanSpec {
         try {
             pWhite.moveTile(game, board, fromQWhiteTile, fromRWhiteTile, 0,1);
         } catch (Hive.IllegalMove illegalMove) {
+            System.out.println(illegalMove.getMessage());
             assertTrue(false, "Shouldn't throw exception yet!");
         }
 
