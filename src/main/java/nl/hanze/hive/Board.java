@@ -95,6 +95,16 @@ public class Board {
         return false;
     }
 
+    public ArrayList<ArrayList<Integer>> getAllPlayerCoords(Hive.Player humanColor) {
+        ArrayList<ArrayList<Integer>> allCoords = new ArrayList<>();
+        for (ArrayList<Integer> coords : board.keySet()) {
+            if(board.get(coords).peek().getColor() == humanColor) {
+                allCoords.add(coords);
+            }
+        }
+        return allCoords;
+    }
+
     public int getHeightStoneStackOnSpot(int q, int r) {
         ArrayList<Integer> coords = new ArrayList<>();
         coords.add(q);

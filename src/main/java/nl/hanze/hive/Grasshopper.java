@@ -3,7 +3,7 @@ package nl.hanze.hive;
 import java.util.ArrayList;
 
 public class Grasshopper {
-    private ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
+    public ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
         ArrayList<ArrayList<Integer>> possibleMoves = new ArrayList<>();
         ArrayList<ArrayList<Integer>> surroundingCoords = board.getSurroundingTiles(fromQ, fromR);
         for (ArrayList<Integer> surroundingCoord : surroundingCoords) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Beetle {
 
-    private ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
+    public ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
         ArrayList<ArrayList<Integer>> possibleMoves = new ArrayList<>();
         ArrayList<ArrayList<Integer>> maybeMoves = board.getSurroundingTiles(fromQ, fromR);
         for (ArrayList<Integer> maybeMove : maybeMoves) {

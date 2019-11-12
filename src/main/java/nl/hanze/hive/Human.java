@@ -6,6 +6,7 @@ public class Human {
     private final Hive.Player color;
     private ArrayList<Stone> stones;
     private int amountOfStartingTiles;
+    private boolean fakeMoves = false;
 
     public Human(Hive.Player color) {
         stones = new ArrayList<Stone>();
@@ -41,6 +42,10 @@ public class Human {
         return color;
     }
 
+    public void setFakeMoves(boolean fakeMoves) {
+        this.fakeMoves = fakeMoves;
+    }
+
     public ArrayList<Stone> getStones() { return stones; }
 
     public void playTile(Game g, Stone stoneToPlay, Board b, Integer q, Integer r) throws Hive.IllegalMove {
@@ -70,9 +75,11 @@ public class Human {
         if (queenbeeTileAvailable &&
                 stones.size() <= (amountOfStartingTiles - 3) &&
                 stoneToPlay.getTile() != Hive.Tile.QUEEN_BEE) { throw new Hive.IllegalMove("Player should play the queen bee tile"); }
-        b.setTile(q, r, stoneToPlay);
-        stones.remove(stoneToPlay);
-        g.nextTurn();
+        if (!fakeMoves) {
+            b.setTile(q, r, stoneToPlay);
+            stones.remove(stoneToPlay);
+            g.nextTurn();
+        }
     }
 
     public void moveTile(Game g, Board b, Integer fromQ, Integer fromR, Integer toQ, Integer toR) throws Hive.IllegalMove {
@@ -149,11 +156,62 @@ public class Human {
             default:
                 throw new Hive.IllegalMove("The game does not recognize this type of stone");
         }
-        b.moveTile(fromQ, fromR, toQ, toR);
-        g.nextTurn();
+        if(!fakeMoves) {
+            b.moveTile(fromQ, fromR, toQ, toR);
+            g.nextTurn();
+        }
     }
 
-    public void pass(Game g) {
-        g.nextTurn();
+    public void pass(Game g) throws Hive.IllegalMove {
+        boolean canPass = true;
+        setFakeMoves(true);
+        if (!this.stones.isEmpty()) { canPass = false; } // Still tiles to play
+        Board board = g.getBoard();
+        HashMap<ArrayList<Integer>, Stack<Stone>> boardMap = board.getBoard();
+        ArrayList<ArrayList<Integer>> allPlayerCoords = board.getAllPlayerCoords(this.color);
+        // Can player play any of his stones
+        boolean canPlayATile = false;
+        for(ArrayList<Integer> coords : allPlayerCoords) {
+            Stone stone = boardMap.get(coords).peek();
+            Hive.Tile typeOfStone = stone.getTile();
+            ArrayList<ArrayList<Integer>> possibleMoves = new ArrayList<>();
+            switch(typeOfStone) {
+                case BEETLE:
+                    Beetle beetle = new Beetle();
+                    possibleMoves = beetle.getPossibleMoves(coords.get(0), coords.get(1), board);
+                    break;
+                case GRASSHOPPER:
+                    Grasshopper grasshopper = new Grasshopper();
+                    possibleMoves = grasshopper.getPossibleMoves(coords.get(0), coords.get(1), board);
+                    break;
+                case QUEEN_BEE:
+                    QueenBee queenBee = new QueenBee();
+                    possibleMoves = queenBee.getPossibleMoves(coords.get(0), coords.get(1), board);
+                    break;
+                case SOLDIER_ANT:
+                    SoldierAnt soldierAnt = new SoldierAnt();
+                    possibleMoves = soldierAnt.getPossibleMoves(coords.get(0), coords.get(1), board);
+                    break;
+                case SPIDER:
+                    Spider spider = new Spider();
+                    possibleMoves = spider.getPossibleMoves(coords.get(0), coords.get(1), board);
+                    break;
+                default:
+                    // throw new Hive.IllegalMove("The game does not recognize this type of stone");
+            }
+            int notGoodMoves = 0;
+            for(ArrayList<Integer> possibleMove : possibleMoves) {
+                try {
+                    moveTile(g, board, coords.get(0), coords.get(1), possibleMove.get(0), possibleMove.get(1));
+                } catch (Hive.IllegalMove illegalMove) {
+                    notGoodMoves += 1;
+                }
+            }
+            if (notGoodMoves != possibleMoves.size()) {
+                canPlayATile = true;
+            }
+        }
+        if(canPlayATile) { canPass = false; }
+        if(canPass) { g.nextTurn(); } else { throw new Hive.IllegalMove("Player is not allowed to pass"); }
     }
 }

@@ -120,17 +120,18 @@ public class HumanSpec {
     }
 
     @Test
-    void givenPlayerCanPassThenTrue() {
+    void givenPlayerCantPassWhenStillThingsToDoThenTrue() {
         Human pWhite = new Human(Hive.Player.WHITE);
         Human pBlack = new Human(Hive.Player.BLACK);
         Board board = new Board();
         Game g = new Game(pWhite, pBlack, board);
 
         Human currentHuman = g.getCurrentHuman();
-        currentHuman.pass(g);
-        currentHuman = g.getCurrentHuman();
-
-        assertEquals(pBlack, currentHuman);
+        try {
+            currentHuman.pass(g);
+        } catch (Hive.IllegalMove illegalMove) {
+            assertTrue(true);
+        }
     }
 
     @Test

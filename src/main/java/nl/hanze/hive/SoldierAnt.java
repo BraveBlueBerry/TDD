@@ -6,7 +6,7 @@ public class SoldierAnt {
     private Board board;
     private ArrayList<Integer> startPosition;
 
-    private ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
+    public ArrayList<ArrayList<Integer>> getPossibleMoves(int fromQ, int fromR, Board board) {
         ArrayList<Integer> fromCoords = new ArrayList<>();
         fromCoords.add(fromQ);
         fromCoords.add(fromR);
