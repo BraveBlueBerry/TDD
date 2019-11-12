@@ -2,6 +2,7 @@ package nl.hanze.hive;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HiveGameSpec {
@@ -57,5 +58,12 @@ public class HiveGameSpec {
         } catch (Hive.IllegalMove illegalMove) {
             assertTrue(true);
         }
+    }
+
+    @Test
+    void givenBlackWinsWhenGameJustStartedThenFalse() {
+        HiveGame hiveGame = new HiveGame();
+        boolean isBlackWinner = hiveGame.isWinner(Hive.Player.BLACK);
+        assertFalse(isBlackWinner);
     }
 }
